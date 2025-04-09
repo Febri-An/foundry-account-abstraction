@@ -1,66 +1,76 @@
-## Foundry
+# ✨ MinimalAccount — ERC-4337 Smart Contract Wallet
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+A lightweight and secure **smart contract wallet** implementation, fully compatible with [ERC-4337 (Account Abstraction)](https://eips.ethereum.org/EIPS/eip-4337). This project provides a minimal, gas-efficient contract wallet that integrates seamlessly with the `EntryPoint` contract and validates signatures based on `Ownable`.
 
-Foundry consists of:
+## 🚀 Features
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+- 🔐 **Signature validation** using EIP-191 (`ECDSA`)
+- 🔄 **Modular function execution** via `execute()` for meta-transactions
+- 💰 Auto-top-up support with `missingAccountFunds`
+- 🧱 Built to support the official [account-abstraction SDK](https://github.com/eth-infinitism/account-abstraction)
+- ✅ Fully compatible with `EntryPoint.handleOps`
 
-## Documentation
+---
 
-https://book.getfoundry.sh/
+## 🧠 How It Works
 
-## Usage
+`MinimalAccount` implements the `IAccount` interface and acts as a smart contract wallet that:
 
-### Build
+- Uses `msg.sender == owner` or `EntryPoint` for access control
+- Validates `UserOperation` signatures based on the wallet owner's address
+- Can receive native tokens and execute arbitrary calls
 
-```shell
-$ forge build
+---
+
+## 📂 Project Structure
+
+```bash
+.
+├── lib
+│   └── account-abstraction     # ERC-4337 core contracts (as a git submodule or clone)
+├── script
+│   ├── SendPackedUserOp.s.sol  # Script (to be implemented) for testing UserOperations
+│   └── ...
+├── src
+│   └── MinimalAccount.sol      # The smart contract wallet
+├── foundry.toml                # Foundry config
+└── README.md                   # You are here 😎
 ```
 
-### Test
+## 🛠️ Usage
+**🧪 Testing Locally (with Foundry)**
 
-```shell
-$ forge test
+1. **Install dependencies**
+```bash
+git clone https://github.com/Febri-An/foundry-account-abstraction.git
+cd foundry-account-abstraction
+make install
+```
+2. **Compile**
+```bash
+forge build
+```
+3. **Deploy or Run Script**
+    (Assuming you write logic in `SendPackedUserOp.s.sol`)
+    _please take a look first!_
+```bash
+forge script script/SendPackedUserOp.s.sol --rpc-url <YOUR_RPC_URL> --private-key <PRIVATE_KEY> --broadcast
 ```
 
-### Format
+## 📌 TODO
+- Implement `SendPackedUserOp.s.sol` to simulate sending a `UserOperation`
+- Integrate with a bundler (like StackUp or Pimlico)
 
-```shell
-$ forge fmt
-```
+## 💡 Inspirations
+This contract was inspired by:
+    **eth-infinitism/account-abstraction**
 
-### Gas Snapshots
+## 🧑‍💻 Author
 
-```shell
-$ forge snapshot
-```
+Built with ☕, 💻, and 💡 by **Febri Nirwana**
+Open to feedback and contributions!
 
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
+## 📜 License
+```yaml
+Licensed under the MIT License.
 ```
